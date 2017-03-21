@@ -5,8 +5,8 @@ from articles.models import Article
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
 	email = serializers.EmailField(required=True)
-	first_name = serializers.CharField(required=False)
-	last_name = serializers.CharField(required=False)
+	first_name = serializers.CharField(required=False, max_lenght=100)
+	last_name = serializers.CharField(required=False, max_lenght=100)
 	class Meta:
 		model = User
 		fields = ('username','first_name','last_name','email','password')
