@@ -4,9 +4,9 @@ from articles.models import Article
 #from django.contrib.auth import get_user_model
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-	email = serializers.EmailField(null=False, blank=False)
-	first_name = serializers.CharField(null=True, blank=True)
-	last_name = serializers.CharField(null=True,blank=True)
+	email = serializers.EmailField(required=True)
+	first_name = serializers.CharField(required=False)
+	last_name = serializers.CharField(required=False)
 	class Meta:
 		model = User
 		fields = ('username','first_name','last_name','email','password')
