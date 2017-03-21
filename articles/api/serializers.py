@@ -38,7 +38,7 @@ class ArticleCreateSerializer(serializers.ModelSerializer):
 		fields = ('source',)
 
 class ArticleListSerializer(serializers.ModelSerializer):
-	url = serializers.HyperlinkedIdentityField(view_name='api_articles:details')
+	url = serializers.HyperlinkedIdentityField(view_name='api_articles:detail')
 	class Meta:
 		model = Article
 		fields = ('url','title',)
