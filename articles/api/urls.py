@@ -9,7 +9,7 @@ from .views import(
 from rest_framework.authtoken import views
 urlpatterns = [
 		url(r'article_list/$',ArticleListAPIView.as_view(),name='article_list'),
-		url(r'detail/$',ArticleDetailAPIView.as_view(), name='detail'),
+		url(r'(?P<pk>\d+)/$',ArticleDetailAPIView.as_view(), name='detail'),
 		url(r'create/$',ArticleCreateAPIView.as_view(), name='create'),
 		url(r'^register/$',UserRegistrationAPIView.as_view(),name='register'),
 		url(r'login/$',UserLoginAPIView.as_view(), name='login'),
