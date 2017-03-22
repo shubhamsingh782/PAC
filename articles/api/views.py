@@ -2,12 +2,14 @@ from .serializers import(
 	UserRegistrationSerializer,
 	UserLoginSerializer,
 	ArticleCreateSerializer,
-	ArticleListSerializer
+	ArticleListSerializer,
+	ArticleDetailSerializer,
 	)
 from rest_framework.generics import(
 	CreateAPIView,
 	ListAPIView,
-	RetrieveAPIView
+	RetrieveAPIView,
+	DestroyAPIView,
 	)
 from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -15,6 +17,8 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from articles.models import Article
+from django.contrib import auth
+from rest_framework.authtoken.models import Token
 
 def scrape(url):
 	title="hey"
@@ -33,8 +37,7 @@ class UserLoginAPIView(APIView):
 		data = request.data
 		serializer = UserLoginSerializer(data=data)
 		if serializer.is_valid():
-			new_data = serializer.data
-			return Response(new_data, status=HTTP_200_OK)
+			return Response(serializer.data, status=HTTP_200_OK)
 		return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 class ArticleCreateAPIView(CreateAPIView):
@@ -56,6 +59,20 @@ class ArticleListAPIView(ListAPIView):
 		return articles
 
 class ArticleDetailAPIView(RetrieveAPIView):
-	serializer_class = ArticleListSerializer
+	serializer_class = ArticleDetailSerializer
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated]
+
+class ArticleDeletAPIView(DestroyAPIView):
+	serializer_class = ArticleDetailSerializer
+	queryset = Article.objects.all()
+	permission_classes = [IsAuthenticated,]
+
+class APILogout(APIView):
+	queryset = User.objects.all()
+	permission_classes = [IsAuthenticated,]
+
+	def get(self,request):
+		request.user.auth_token.delete()
+		auth.logout(request)
+		return Response(status=HTTP_200_OK)
