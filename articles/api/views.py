@@ -11,6 +11,7 @@ from rest_framework.generics import(
 	RetrieveAPIView,
 	DestroyAPIView,
 	)
+from .permissions import IsOwner
 from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -61,12 +62,12 @@ class ArticleListAPIView(ListAPIView):
 class ArticleDetailAPIView(RetrieveAPIView):
 	serializer_class = ArticleDetailSerializer
 	queryset = Article.objects.all()
-	permission_classes = [IsAuthenticated]
+	permission_classes = [IsAuthenticated, IsOwner]
 
 class ArticleDeletAPIView(DestroyAPIView):
 	serializer_class = ArticleDetailSerializer
 	queryset = Article.objects.all()
-	permission_classes = [IsAuthenticated,]
+	permission_classes = [IsAuthenticated, IsOwner]
 
 class APILogout(APIView):
 	queryset = User.objects.all()
@@ -75,4 +76,4 @@ class APILogout(APIView):
 	def get(self,request):
 		request.user.auth_token.delete()
 		auth.logout(request)
-		return Response(status=HTTP_200_OK)
+		return Response({'success': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
