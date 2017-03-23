@@ -20,10 +20,14 @@ from rest_framework.views import APIView
 from articles.models import Article
 from django.contrib import auth
 from rest_framework.authtoken.models import Token
+from newspaper import Article as page
 
 def scrape(url):
-	title="hey"
-	content = "hllo there here im"
+	article = page(url)
+	article.download()
+	article.parse()
+	title = article.title +" "+article.publish_date
+	content = article.text
 	return title,content
 
 class UserRegistrationAPIView(CreateAPIView):
