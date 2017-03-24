@@ -26,7 +26,7 @@ def scrape(url):
 	article = page(url)
 	article.download()
 	article.parse()
-	title = article.title +" "+article.publish_date
+	title = article.title +" "+str(article.publish_date)
 	content = article.text
 	return title,content
 
