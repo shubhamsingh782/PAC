@@ -21,13 +21,25 @@ from articles.models import Article
 from django.contrib import auth
 from rest_framework.authtoken.models import Token
 from newspaper import Article as page
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
 
 def scrape(url):
-	article = page(url)
-	article.download()
-	article.parse()
-	title = article.title +" "+str(article.publish_date)
-	content = article.text
+	try:
+		article = page(url)
+		article.download()
+		article.parse()
+		title = article.title
+		content = article.text
+	except:
+		html = urlopen(url)
+		article = BeautifulSoup(html.read(),'html.parser')
+		title = article.title.text
+		content = ""
+		for para in article.find_all('p'):
+			content+=para.text
+			content+='\n'
+			
 	return title,content
 
 class UserRegistrationAPIView(CreateAPIView):
