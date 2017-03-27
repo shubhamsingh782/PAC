@@ -22,3 +22,4 @@ requests==2.13.0
 requests-file==1.4.1
 six==1.10.0
 tldextract==2.0.2
+django-cors-headers==2.0.2
