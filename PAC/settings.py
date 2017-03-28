@@ -92,8 +92,8 @@ WSGI_APPLICATION = 'PAC.wsgi.application'
 import dj_database_url
 DATABASES = {
     'default': {
-        dj_database_url.config(),
-            }
+        dj_database_url.config()
+        }
 }
 
 
