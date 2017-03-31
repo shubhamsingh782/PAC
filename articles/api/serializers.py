@@ -4,7 +4,7 @@ from articles.models import Article
 #from django.contrib.auth import get_user_model
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-	email = serializers.EmailField(required=True, unique=True)
+	email = serializers.EmailField(required=True)
 	first_name = serializers.CharField(required=True, max_length=100)
 	last_name = serializers.CharField(required=True, max_length=100)
 	class Meta:
