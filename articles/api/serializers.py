@@ -4,7 +4,7 @@ from articles.models import Article
 #from django.contrib.auth import get_user_model
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-	email = serializers.EmailField(required=True)
+	email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
 	first_name = serializers.CharField(required=True, max_length=100)
 	last_name = serializers.CharField(required=True, max_length=100)
 	class Meta:
@@ -41,7 +41,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 	url = serializers.HyperlinkedIdentityField(view_name='api_articles:detail')
 	class Meta:
 		model = Article
-		fields = ('id','url','title',)
+		fields = ('id','url','title',1)
 
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
