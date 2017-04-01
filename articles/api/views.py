@@ -92,12 +92,12 @@ class ArticleDeletAPIView(DestroyAPIView):
 
 class APILogout(APIView):
 	queryset = User.objects.all()
-	permission_classes = [IsAuthenticated,]
+	#permission_classes = [IsAuthenticated,]
 
 	def get(self,request):
 		if request.user.is_authenticated:
 			request.user.auth_token.delete()
 			auth.logout(request)
 			return Response({'status':True,'message': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
-		else:
-			return Response({'status':False,'message': 'Invalid Request'}, status=HTTP_400_BAD_REQUEST)
+		
+		return Response({'status':False,'message': 'Invalid Request'}, status=HTTP_400_BAD_REQUEST)
