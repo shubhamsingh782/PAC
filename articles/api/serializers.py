@@ -26,10 +26,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 		return validated_data
 
 class UserLoginSerializer(serializers.ModelSerializer):
-	token = serializers.CharField(allow_blank=False, read_only=True)
+	#token = serializers.CharField(allow_blank=False, read_only=True)
 	class Meta:
 		model = User
-		fields = ('username','password','token')
+		fields = ('username','password',)
 
 		extra_kwargs = {'password':{'write_only':True}}
 
