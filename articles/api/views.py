@@ -53,7 +53,9 @@ class UserLoginAPIView(APIView):
 	def post(self, request, *args, **kwargs):
 		data = request.data
 		serializer = UserLoginSerializer(data=data)
-		serializer.is_valid(raise_exception=True)
+		if not serializer.is_valid():
+			return Response({'message':"error occured"}, status=HTTP_400_BAD_REQUEST)
+
 		user = serializer.validated_data['user']
 		if user:
 			return Response({'status':True, "message":"successfully logged in"}, status=HTTP_200_OK)
