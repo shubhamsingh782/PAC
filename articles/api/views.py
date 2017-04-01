@@ -63,6 +63,7 @@ class UserLoginAPIView(APIView):
 						{'status':True,
 							 "message":"successfully logged in",
 							 'token':token.key,
+							 'username':user.username,
 							 'name':user.first_name+" "+user.last_name,
 							 'email':user.email
 							 },
