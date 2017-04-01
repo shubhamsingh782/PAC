@@ -56,8 +56,8 @@ class UserLoginAPIView(APIView):
 		serializer.is_valid(raise_exception=True)
 		user = serializer.validated_data['user']
 		if user:
-			return Response(serializer.data, status=HTTP_200_OK)
-		return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+			return Response({'status':True, "message":"successfully logged in"}, status=HTTP_200_OK)
+		return Response({'message':"error occured"}, status=HTTP_400_BAD_REQUEST)
 
 class ArticleCreateAPIView(CreateAPIView):
 	serializer_class = ArticleCreateSerializer
