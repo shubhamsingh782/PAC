@@ -95,6 +95,9 @@ class APILogout(APIView):
 	permission_classes = [IsAuthenticated,]
 
 	def get(self,request):
-		request.user.auth_token.delete()
-		auth.logout(request)
-		return Response({'success': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
+		if request.user.is_authenticated:
+			request.user.auth_token.delete()
+			auth.logout(request)
+			return Response({'status':True,'message': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
+		else:
+			return Response({'status':False,'message': 'Invalid Request'}, status=HTTP_400_BAD_REQUEST)
