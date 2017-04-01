@@ -57,7 +57,7 @@ class UserLoginAPIView(APIView):
 			return Response({'message':"Incomplete Credentials"}, status=HTTP_400_BAD_REQUEST)
 
 		user = serializer.validated_data['user']
-		token, created = Token.objects.get_or_created(user=user)
+		token, created = Token.objects.get_or_create(user=user)
 		if user:
 			return Response({'status':True, "message":"successfully logged in",'token':token.key, 'name':user.first_name}, status=HTTP_200_OK)
 		return Response({'status':False,'message':"Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
