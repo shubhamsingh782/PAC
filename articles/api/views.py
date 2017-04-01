@@ -54,7 +54,7 @@ class UserLoginAPIView(APIView):
 		data = request.data
 		serializer = UserLoginSerializer(data=data)
 		if not serializer.is_valid():
-			return Response({'message':"error occured"}, status=HTTP_400_BAD_REQUEST)
+			return Response({'message':"Incomplete Credentials"}, status=HTTP_400_BAD_REQUEST)
 
 		user = serializer.validated_data['user']
 		if user:
