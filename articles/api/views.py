@@ -59,7 +59,14 @@ class UserLoginAPIView(APIView):
 		user = serializer.validated_data['user']
 		token, created = Token.objects.get_or_create(user=user)
 		if user:
-			return Response({'status':True, "message":"successfully logged in",'token':token.key, 'name':user.first_name}, status=HTTP_200_OK)
+			return Response(
+						{'status':True,
+							 "message":"successfully logged in",
+							 'token':token.key,
+							 'name':user.first_name+" "+user.last_name,
+							 'email':user.email
+							 },
+						 status=HTTP_200_OK)
 		return Response({'status':False,'message':"Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
 
 class ArticleCreateAPIView(CreateAPIView):
@@ -92,12 +99,9 @@ class ArticleDeletAPIView(DestroyAPIView):
 
 class APILogout(APIView):
 	queryset = User.objects.all()
-	#permission_classes = [IsAuthenticated,]
+	permission_classes = [IsAuthenticated,]
 
 	def get(self,request):
-		if request.user.is_authenticated:
 			request.user.auth_token.delete()
 			auth.logout(request)
 			return Response({'status':True,'message': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
-		
-		return Response({'status':False,'message': 'Invalid Request'}, status=HTTP_400_BAD_REQUEST)
