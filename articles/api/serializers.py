@@ -26,6 +26,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 		return validated_data
 
 class UserLoginSerializer(serializers.ModelSerializer):
+	username = serializers.CharField(required=True)
+	password = serializers.CharField(required=True, style={'input_type': 'password'})
 	#token = serializers.CharField(allow_blank=False, read_only=True)
 	class Meta:
 		model = User
