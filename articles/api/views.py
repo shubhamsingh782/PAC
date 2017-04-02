@@ -15,7 +15,7 @@ from .permissions import IsOwner
 from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 from articles.models import Article
 from django.contrib import auth
@@ -115,6 +115,15 @@ class ArticleDeletAPIView(DestroyAPIView):
 	serializer_class = ArticleDetailSerializer
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
+
+	def delete(self, request, *args, **kwargs):
+		obj = self.get_object()
+		if obj:
+			obj.delete()
+			return Response({'status':True, 'message':'Content Deleted SuccessFully'}, status=HTTP_204_NO_CONTENT)
+
+		return Response({'status':False, 'message':'No Such Content Found To delete'}, status=HTTP_204_NO_CONTENT)
+
 
 class APILogout(APIView):
 	queryset = User.objects.all()
