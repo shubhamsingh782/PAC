@@ -117,7 +117,7 @@ class ArticleDeletAPIView(APIView):
 	permission_classes = [IsAuthenticated, IsOwner]
 
 	def get_object(self, pk):
-		return Article.object.get(pk=pk)
+		return Article.objects.get(pk=pk)
 
 	def delete(self, request, pk, *args, **kwargs):
 		obj = self.get_object(pk)
