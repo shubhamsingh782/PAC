@@ -130,7 +130,7 @@ class ArticleDeletAPIView(APIView):
 
 		return Response({'status':False, 'message':'No Such Content Found To delete'}, status=HTTP_204_NO_CONTENT)
 
-	def delete(sel, request, pk, *args, **kwargs):
+	def delete(self, request, pk, *args, **kwargs):
 		return self.destroy(request, pk, *args, **kwargs)
 
 
