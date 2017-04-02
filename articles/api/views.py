@@ -44,10 +44,17 @@ def scrape(url):
 	if image == None or image=='':
 		link=article.find('img')
 		src = link['src']
-		if '//' in src:
+		if 'https' in src:
+			image=src
+		elif '//' in src:
 			image = 'https:'+src
 		else:
-			image=url+src
+			sublist = url.split('/')
+			if src[0]=='/':
+				image='https://'+sublist[2]+src
+			else:
+				image='https://'+sublist[2]+'/'+src
+
 			
 	return title,content, image
 
