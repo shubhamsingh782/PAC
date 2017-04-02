@@ -41,8 +41,12 @@ def scrape(url):
 		for para in article.find_all('p'):
 			content+=para.text
 			content+='\n'
+	
+	html = urlopen(url)
+	art = BeautifulSoup(html.read(),'html.parser')
+	
 	if image == None or image=='':
-		link=article.find('img')
+		link=art.find('img')
 		src = link['src']
 		if 'https' in src:
 			image=src
