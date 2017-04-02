@@ -122,13 +122,18 @@ class ArticleDeletAPIView(APIView):
 			article = Article.objects.get(pk=pk)
 		except ObjectDoesNotExist:
 			article = None
-		
+
 		return article
 
-	def perform_destroy(self, instance):
+	def perform_destroy(self, request, instance):
 		if instance:
-			instance.delete()
+			
+			if request.user != instance.user:
+				return Response({'status':False, 'message':'You Do Not have permission to Delete This object'}, status=HTTP_400_BAD_REQUEST)
+			
+			instance.delete()			
 			return Response({'status':True, 'message':'Content Deleted SuccessFully'}, status=HTTP_200_OK)
+		
 		return Response({'status':False, 'message':'No Such Content Found To delete'}, status=HTTP_400_BAD_REQUEST)
 
 
