@@ -25,26 +25,25 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
 def scrape(url):
+	html = urlopen(url)
+	art = BeautifulSoup(html.read(),'html.parser')
+	title = art.title.text
+
 	try:
 		article = page(url)
 		article.download()
 		article.parse()
-		title = article.title
 		content = article.text
 		image = article.top_image
 	except:
-		html = urlopen(url)
-		article = BeautifulSoup(html.read(),'html.parser')
 		image = ''
-		title = article.title.text
+		title = art.title.text
 		content = ""
 		for para in article.find_all('p'):
 			content+=para.text
 			content+='\n'
 	
 	if image == None or image=='':
-		html = urlopen(url)
-		art = BeautifulSoup(html.read(),'html.parser')
 		link=art.find('img')
 		src = link['src']
 		if 'https' or 'http' in src:
