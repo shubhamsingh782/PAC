@@ -31,16 +31,18 @@ def scrape(url):
 		article.parse()
 		title = article.title
 		content = article.text
+		image = article.top_image
 	except:
 		html = urlopen(url)
 		article = BeautifulSoup(html.read(),'html.parser')
+		image = 'https://No_Image_Found/'
 		title = article.title.text
 		content = ""
 		for para in article.find_all('p'):
 			content+=para.text
 			content+='\n'
 			
-	return title,content
+	return title,content, image
 
 class UserRegistrationAPIView(CreateAPIView):
 	serializer_class = UserRegistrationSerializer
@@ -77,8 +79,8 @@ class ArticleCreateAPIView(CreateAPIView):
 
 	def perform_create(self,serializer):
 		url=self.request.POST.get('source')
-		title,content = scrape(url)
-		serializer.save(user=self.request.user,title=title,content=content)
+		title, content, image = scrape(url)
+		serializer.save(user=self.request.user,title=title,content=content,image=image)
 
 class ArticleListAPIView(ListAPIView):
 	serializer_class = ArticleListSerializer

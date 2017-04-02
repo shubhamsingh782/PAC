@@ -12,6 +12,7 @@ from rest_framework.authtoken.models import Token
 class Article(models.Model):
 	user = models.ForeignKey(User, related_name='scraped_article')
 	source = models.URLField(max_length=500 ,blank=False, null=False)
+	image = models.URLField(max_length=500,blank=True, null=True)
 	title = models.CharField(max_length=200, blank=False)
 	slug = models.SlugField(max_length=250, unique_for_date='created')
 	content = models.TextField()
