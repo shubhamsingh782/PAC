@@ -116,7 +116,7 @@ class ArticleDeletAPIView(DestroyAPIView):
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
 
-	def delete(self, request, *args, **kwargs):
+	def destroy(self, request, *args, **kwargs):
 		obj = self.get_object()
 		if obj:
 			obj.delete()
