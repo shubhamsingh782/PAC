@@ -15,7 +15,8 @@ from .permissions import IsOwner
 from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
 from articles.models import Article
 from django.contrib import auth
@@ -117,16 +118,19 @@ class ArticleDeletAPIView(APIView):
 	permission_classes = [IsAuthenticated, IsOwner]
 
 	def get_object(self, pk):
-		article = Article.objects.get(pk=pk)
-		if article:
-			return article
+		try:
+			article = Article.objects.get(pk=pk)
+		except ObjectDoesNotExist:
+			article = None
 		
-		return Response({'status':False, 'message':'No Such Content Found To delete'}, status=HTTP_200_OK)
+		return article
 
 	def perform_destroy(self, instance):
 		if instance:
 			instance.delete()
 			return Response({'status':True, 'message':'Content Deleted SuccessFully'}, status=HTTP_200_OK)
+		return Response({'status':False, 'message':'No Such Content Found To delete'}, status=HTTP_400_BAD_REQUEST)
+
 
 
 	def destroy(self, request, pk, *args, **kwargs):
