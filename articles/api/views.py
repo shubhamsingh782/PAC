@@ -111,12 +111,12 @@ class ArticleDetailAPIView(RetrieveAPIView):
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
 
-class ArticleDeletAPIView(DestroyAPIView):
+class ArticleDeletAPIView(APIView):
 	serializer_class = ArticleDetailSerializer
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
 
-	def destroy(self, request, *args, **kwargs):
+	def delete(self, request, *args, **kwargs):
 		obj = self.get_object()
 		if obj:
 			obj.delete()
