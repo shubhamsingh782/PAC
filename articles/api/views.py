@@ -119,7 +119,7 @@ class ArticleDeletAPIView(APIView):
 	def get_object(self, pk):
 		return Article.objects.get(pk=pk)
 
-	def delete(self, request, pk, *args, **kwargs):
+	def destroy(self, request, pk, *args, **kwargs):
 		obj = self.get_object(pk)
 		if obj:
 			obj.delete()
