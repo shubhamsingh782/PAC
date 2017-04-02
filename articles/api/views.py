@@ -35,12 +35,19 @@ def scrape(url):
 	except:
 		html = urlopen(url)
 		article = BeautifulSoup(html.read(),'html.parser')
-		image = 'https://No_Image_Found/'
+		image = ''
 		title = article.title.text
 		content = ""
 		for para in article.find_all('p'):
 			content+=para.text
 			content+='\n'
+	if image == None or image=='':
+		link=article.find('img')
+		src = link['src']
+		if '//' in src:
+			image = 'https:'+src
+		else:
+			image=url+src
 			
 	return title,content, image
 
