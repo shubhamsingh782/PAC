@@ -116,8 +116,11 @@ class ArticleDeletAPIView(APIView):
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
 
-	def delete(self, request, *args, **kwargs):
-		obj = self.get_object()
+	def get_object(self, pk):
+		return Article.object.get(pk=pk)
+
+	def delete(self, request, pk, *args, **kwargs):
+		obj = self.get_object(pk)
 		if obj:
 			obj.delete()
 			return Response({'status':True, 'message':'Content Deleted SuccessFully'}, status=HTTP_204_NO_CONTENT)
