@@ -122,9 +122,9 @@ class ArticleDeletAPIView(APIView):
 	def perform_destroy(self, instance):
 		if instance:
 			instance.delete()
-			return Response({'status':True, 'message':'Content Deleted SuccessFully'}, status=HTTP_204_NO_CONTENT)
+			return Response({'status':True, 'message':'Content Deleted SuccessFully'}, status=HTTP_200_OK)
 
-		return Response({'status':False, 'message':'No Such Content Found To delete'}, status=HTTP_204_NO_CONTENT)
+		return Response({'status':False, 'message':'No Such Content Found To delete'}, status=HTTP_200_OK)
 
 
 	def destroy(self, request, pk, *args, **kwargs):
