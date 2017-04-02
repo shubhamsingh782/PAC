@@ -48,7 +48,7 @@ def scrape(url):
 	if image == None or image=='':
 		link=art.find('img')
 		src = link['src']
-		if 'https' in src:
+		if 'https' or 'http' in src:
 			image=src
 		elif '//' in src:
 			image = 'https:'+src
