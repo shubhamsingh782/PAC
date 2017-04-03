@@ -55,8 +55,8 @@ def scrape(url):
 		image = ''
 		content = ""
 		for para in art.find_all('p'):
-			content+=para.text
 			content+='\n'
+			content+=para.text
 	
 	if image == None or image=='':
 		link=art.find('img')
