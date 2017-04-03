@@ -54,7 +54,7 @@ def scrape(url):
 	except:
 		image = ''
 		content = ""
-		for para in article.find_all('p'):
+		for para in art.find_all('p'):
 			content+=para.text
 			content+='\n'
 	
