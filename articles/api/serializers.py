@@ -29,7 +29,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 		return Response( {
 					'success':True,
 					'message':'Successfully Registered',
-					'username':validated_data['username'],
+					'username':user_obj.username,
 					'name':validated_data['first_name']+' '+validated_data['last_name'],
 					'email':validated_data['email']
 					},
