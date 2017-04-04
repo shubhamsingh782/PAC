@@ -94,7 +94,7 @@ class UserRegistrationAPIView(APIView):
 							'success':True,
 							'message':'SuccessFully Registered',
 							'username':user.username,
-							'name':user.first_name+" "+user.last_name
+							'name':user.first_name+" "+user.last_name,
 							'email':user.email
 							},
 							status=HTTP_200_OK)
@@ -112,13 +112,13 @@ class UserLoginAPIView(APIView):
 		data = request.data
 		serializer = UserLoginSerializer(data=data)
 		if not serializer.is_valid():
-			return Response({'status':False,'message':"Invalid Credentials"}, status=HTTP_400_BAD_REQUEST)
+			return Response({'success':False,'message':"Invalid Credentials"}, status=HTTP_400_BAD_REQUEST)
 
 		user = serializer.validated_data['user']
 		token, created = Token.objects.get_or_create(user=user)
 		if user:
 			return Response(
-						{'status':True,
+						{'success':True,
 							 "message":"successfully logged in",
 							 'token':token.key,
 							 'username':user.username,
@@ -126,7 +126,7 @@ class UserLoginAPIView(APIView):
 							 'email':user.email
 							 },
 						 status=HTTP_200_OK)
-		return Response({'status':False,'message':"Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
+		return Response({'success':False,'message':"Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
 
 class ArticleCreateAPIView(CreateAPIView):
 	serializer_class = ArticleCreateSerializer
@@ -168,12 +168,12 @@ class ArticleDeletAPIView(APIView):
 		if instance:
 			
 			if self.request.user != instance.user:
-				return Response({'status':False, 'message':'You Do Not have permission to Delete This object'}, status=HTTP_400_BAD_REQUEST)
+				return Response({'success':False, 'message':'You Do Not have permission to Delete This object'}, status=HTTP_400_BAD_REQUEST)
 			
 			instance.delete()			
-			return Response({'status':True, 'message':'Content Deleted SuccessFully'}, status=HTTP_200_OK)
+			return Response({'success':True, 'message':'Content Deleted SuccessFully'}, status=HTTP_200_OK)
 		
-		return Response({'status':False, 'message':'No Such Content Found To delete'}, status=HTTP_400_BAD_REQUEST)
+		return Response({'success':False, 'message':'No Such Content Found To delete'}, status=HTTP_400_BAD_REQUEST)
 
 
 
@@ -192,4 +192,4 @@ class APILogout(APIView):
 	def get(self,request):
 			request.user.auth_token.delete()
 			auth.logout(request)
-			return Response({'status':True,'message': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
+			return Response({'success':True,'message': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
