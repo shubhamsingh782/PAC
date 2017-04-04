@@ -102,9 +102,11 @@ class UserRegistrationAPIView(APIView):
 		else:
 			return Response({
 							'success':False,
-							'message':'Registration failed Try again'
+							'message':serializer.errors
 							},
 							status=HTTP_400_BAD_REQUEST)
+
+
 class UserLoginAPIView(APIView):
 	serializer_class = UserLoginSerializer
 	permission_classes = [AllowAny]
