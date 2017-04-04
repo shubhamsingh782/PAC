@@ -29,7 +29,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 		return Response( {
 					'success':True,
 					'message':'Successfully Registered',
-					'data':validated_data
+					'username':validated_data['username'],
+					'name':validated_data['first_name']+' '+validated_data['last_name'],
+					'email':validated_data['email']
 					},
 					status=HTTP_200_OK)
 
