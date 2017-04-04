@@ -84,11 +84,11 @@ class UserRegistrationAPIView(APIView):
 		serializer = UserRegistrationSerializer(data=data)
 		if serializer.is_valid():
 			user = User.objects.create_user(
-								username=serializer.init_data['username'],
-								first_name=serializer.init_data['first_name'],
-								last_name=serializer.init_data['last_name'],
-								email=serializer.init_data['email'],
-								password=serializer.init_data['password'])
+								username=serializer['username'],
+								first_name=serializer['first_name'],
+								last_name=serializer['last_name'],
+								email=serializer['email'],
+								password=serializer['password'])
 			user.save()
 			return Response({
 							'success':True,
