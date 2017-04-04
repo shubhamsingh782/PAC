@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
 from articles.models import Article
 from rest_framework.validators import UniqueValidator
 #from django.contrib.auth import get_user_model
@@ -24,7 +26,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 				)
 		user_obj.set_password(validated_data['password'])
 		user_obj.save()
-		return validated_data
+		return Response( {
+					'success':True,
+					'message':'Successfully Registered',
+					'data':validated_data
+					},
+					status=HTTP_200_OK)
 
 class UserLoginSerializer(serializers.ModelSerializer):
 	username = serializers.CharField(required=True)
