@@ -17,18 +17,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 		extra_kwargs = {'password':{'write_only':True}}
 
-	def create(self, validated_data):
-		user_obj = User(
-				username=validated_data['username'],
-				first_name=validated_data['first_name'],
-				last_name=validated_data['last_name'],
-				email = validated_data['email']
-				)
-		user_obj.set_password(validated_data['password'])
-		user_obj.save()
-		validated_data['success']=True
-		validated_data['message']="Successfully Registered"
-		return validated_data
 
 class UserLoginSerializer(serializers.ModelSerializer):
 	username = serializers.CharField(required=True)

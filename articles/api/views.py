@@ -75,10 +75,34 @@ def scrape(url):
 			
 	return title, content, image
 
-class UserRegistrationAPIView(CreateAPIView):
+class UserRegistrationAPIView(APIView):
 	serializer_class = UserRegistrationSerializer
 	queryset = User.objects.all()
 
+	def post(self, request, *args, **kwargs):
+		data=request.data
+		serializer = UserRegistrationSerializer(data=data)
+		if serializer.is_valid():
+			user = User(
+					username=serializer['username'],
+					first_name=serializer['first_name'],
+					last_name=serializer['last_name'],
+					email=serializer['email']
+					)
+			user.set_password(serializer['password'])
+			user.save()
+			return Response({
+						'success':True,
+						'message':'SuccessFully Registered',
+						'username':user.username,
+						'first_name':user.first_name,
+						'last_name':user.last_name,
+						'email':user.email
+						},
+						status=HTTP_200_OK
+						)
+		else:
+			return Response({'success':False, 'message':'Registration Failed Check Your Username or Email'}, status=HTTP_400_BAD_REQUEST)
 class UserLoginAPIView(APIView):
 	serializer_class = UserLoginSerializer
 	permission_classes = [AllowAny]
