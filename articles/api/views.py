@@ -73,7 +73,7 @@ def scrape(url):
 				image='https://'+sublist[2]+'/'+src
 
 			
-	return title,content, image
+	return title, content, image
 
 class UserRegistrationAPIView(CreateAPIView):
 	serializer_class = UserRegistrationSerializer
@@ -85,6 +85,7 @@ class UserLoginAPIView(APIView):
 
 	def post(self, request, *args, **kwargs):
 		data = request.data
+		return Response({'data':data},status=HTTP_200_OK)
 		serializer = UserLoginSerializer(data=data)
 		if not serializer.is_valid():
 			return Response({'status':False,'message':"Invalid Credentials"}, status=HTTP_400_BAD_REQUEST)
