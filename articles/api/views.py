@@ -79,30 +79,31 @@ class UserRegistrationAPIView(APIView):
 	serializer_class = UserRegistrationSerializer
 	queryset = User.objects.all()
 
-	def post(self, request, *args, **kwargs):
-		data=request.data
+	def post(self, request, *args. **kwargs):
+		data = request.data
 		serializer = UserRegistrationSerializer(data=data)
 		if serializer.is_valid():
-			user = User.objects.create(
-					username=serializer['username'],
-					first_name=serializer['first_name'],
-					last_name=serializer['last_name'],
-					email=serializer['email']
-					)
-			user.set_password(data['password'])
+			user = User.objects.create_user(
+								username=serializer.init_data['username'],
+								first_name=serializer.init_data['first_name'],
+								last_name=serializer.init_data['last_name'],
+								email=serializer.init_data['email'],
+								password=serializer.init_data['password'])
 			user.save()
 			return Response({
-						'success':True,
-						'message':'SuccessFully Registered',
-						'username':user.username,
-						'first_name':user.first_name,
-						'last_name':user.last_name,
-						'email':user.email
-						},
-						status=HTTP_200_OK
-						)
+							'success':True,
+							'message':'SuccessFully Registered',
+							'username':user.username,
+							'name':user.first_name+" "+user.last_name
+							'email':user.email
+							},
+							status=HTTP_200_OK)
 		else:
-			return Response({'success':False, 'message':'Registration Failed Check Your Username or Email'}, status=HTTP_400_BAD_REQUEST)
+			return Response({
+							'success':False,
+							'message':'Registration failed Try again'
+							},
+							status=HTTP_400_BAD_REQUEST)
 class UserLoginAPIView(APIView):
 	serializer_class = UserLoginSerializer
 	permission_classes = [AllowAny]
