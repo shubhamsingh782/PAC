@@ -79,7 +79,7 @@ class UserRegistrationAPIView(APIView):
 	serializer_class = UserRegistrationSerializer
 	queryset = User.objects.all()
 
-	def post(self, request, *args. **kwargs):
+	def post(self, request, *args, **kwargs):
 		data = request.data
 		serializer = UserRegistrationSerializer(data=data)
 		if serializer.is_valid():
