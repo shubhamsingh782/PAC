@@ -26,14 +26,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 				)
 		user_obj.set_password(validated_data['password'])
 		user_obj.save()
-		return Response( {
-					'success':True,
-					'message':'Successfully Registered',
-					'username':user_obj.username,
-					'name':validated_data['first_name']+' '+validated_data['last_name'],
-					'email':validated_data['email']
-					},
-					status=HTTP_200_OK)
+		validated_data['success']=True
+		validated_data['message']="Successfully Registered"
+		return validated_data
 
 class UserLoginSerializer(serializers.ModelSerializer):
 	username = serializers.CharField(required=True)
