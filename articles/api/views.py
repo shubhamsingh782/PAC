@@ -149,11 +149,27 @@ class ArticleListAPIView(ListAPIView):
 		articles = Article.objects.all().filter(user=self.request.user)
 		return articles
 
-class ArticleDetailAPIView(RetrieveAPIView):
+class ArticleDetailAPIView(APIView):
 	serializer_class = ArticleDetailSerializer
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
 
+	def get_object(self, pk):
+		try:
+			article = Article.objects.get(pk=pk)
+		except ObjectDoesNotExist:
+			article = None
+		return article
+
+	def get(self, request,pk, *args, **kwargs):
+		article = self.get_object(pk)
+		if article:
+			serializer = ArticleDetailSerializer(article)
+			serialized_data = serializer.data
+			response = {'success':True, 'message':'SuccessFully Retrieved Object'}
+			return Response(dict(response.items()+serialized_data.items()), status=HTTP_200_OK)
+		else:
+			return Response({'success':False, 'message':'Object Does Not Exists'})
 
 class ArticleDeletAPIView(APIView):
 	serializer_class = ArticleDetailSerializer
