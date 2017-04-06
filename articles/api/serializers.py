@@ -59,8 +59,8 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
 	url = serializers.HyperlinkedIdentityField(view_name='api_articles:delete')
-	success = True
-	message = "SuccessFully Retrieved object"
+	success = serializers.BooleanField(default=True)
+	message = serializers.CharField(default="SuccessFully Retrieved object")
 	class Meta:
 		model = Article
 		fields = ('success','message','source','title','content','created','url','image',)
