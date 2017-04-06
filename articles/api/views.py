@@ -4,7 +4,6 @@ from .serializers import(
 	ArticleCreateSerializer,
 	ArticleListSerializer,
 	ArticleDetailSerializer,
-	DELETE_URL,
 	)
 from rest_framework.generics import(
 	CreateAPIView,
