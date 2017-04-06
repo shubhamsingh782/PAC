@@ -154,23 +154,6 @@ class ArticleDetailAPIView(APIView):
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
 
-	def get_object(self, pk):
-		try:
-			article = Article.objects.get(pk=pk)
-		except ObjectDoesNotExist:
-			article = None
-
-		return article
-
-	def get(self, request, pk ,*args, **kwargs):
-		obj = self.get_object(pk)
-		serializer = ArticleDetailSerializer(obj)
-		if obj:
-			return Response(serializer.data, status = HTTP_200_OK)
-		else:
-			return Response({'success':False, 'message':'Unable to Retrieve object'}, status=HTTP_400_BAD_REQUEST)
-
-
 
 class ArticleDeletAPIView(APIView):
 	serializer_class = ArticleDetailSerializer
