@@ -164,7 +164,7 @@ class ArticleDetailAPIView(APIView):
 	def get(self, request,pk, *args, **kwargs):
 		article = self.get_object(pk)
 		if article:
-			serializer = ArticleDetailSerializer(intance=article, context={'request':request})
+			serializer = ArticleDetailSerializer(instance=article, context={'request':request})
 			serialized_data = serializer.data
 			response = {'success':True, 'message':'SuccessFully Retrieved Object'}
 			return Response(dict(response.items()+serialized_data.items()), status=HTTP_200_OK)
