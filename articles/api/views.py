@@ -149,7 +149,7 @@ class ArticleListAPIView(ListAPIView):
 		articles = Article.objects.all().filter(user=self.request.user)
 		return articles
 
-class ArticleDetailAPIView(APIView):
+class ArticleDetailAPIView(RetrieveAPIView):
 	serializer_class = ArticleDetailSerializer
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
