@@ -4,6 +4,7 @@ from .serializers import(
 	ArticleCreateSerializer,
 	ArticleListSerializer,
 	ArticleDetailSerializer,
+	DELETE_URL,
 	)
 from rest_framework.generics import(
 	CreateAPIView,
@@ -149,10 +150,37 @@ class ArticleListAPIView(ListAPIView):
 		articles = Article.objects.all().filter(user=self.request.user)
 		return articles
 
-class ArticleDetailAPIView(RetrieveAPIView):
+class ArticleDetailAPIView(APIView):
 	serializer_class = ArticleDetailSerializer
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated, IsOwner]
+
+	def get_object(self, pk):
+		try:
+			article = Article.objects.get(pk=pk)
+		except ObjectDoesNotExist:
+			article = None
+
+		return article
+
+	def get(self, request, pk ,*args, **kwargs):
+		obj = self.get_object(pk)
+		if obj:
+			return Response({
+					'success':True,
+					'message':'SuccessFully retrieved object',
+					'title':obj.title,
+					'source':obj.source,
+					'content':obj.content,
+					'created':obj.created,
+					'image':obj.image,
+					'delete_url':DELETE_URL
+					},
+					status = HTTP_200_OK)
+		else:
+			return Response({'success':False, 'message':'Unable to Retrieve object'}, status=HTTP_400_BAD_REQUEST)
+
+
 
 class ArticleDeletAPIView(APIView):
 	serializer_class = ArticleDetailSerializer
