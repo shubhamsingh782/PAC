@@ -166,8 +166,8 @@ class ArticleDetailAPIView(APIView):
 	def get(self, request, pk ,*args, **kwargs):
 		obj = self.get_object(pk)
 		if obj:
-			return Response({
-					'success':True,
+			return Response(
+				{   'success':True,
 					'message':'SuccessFully retrieved object',
 					'title':obj.title,
 					'source':obj.source,
