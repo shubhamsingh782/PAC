@@ -165,18 +165,9 @@ class ArticleDetailAPIView(APIView):
 
 	def get(self, request, pk ,*args, **kwargs):
 		obj = self.get_object(pk)
+		serializer = ArticleDetailSerializer(obj)
 		if obj:
-			return Response(
-				{   'success':True,
-					'message':'SuccessFully retrieved object',
-					'title':obj.title,
-					'source':obj.source,
-					'content':obj.content,
-					'created':obj.created,
-					'image':obj.image,
-					'delete_url':DELETE_URL
-					},
-					status = HTTP_200_OK)
+			return Response(serializer.data, status = HTTP_200_OK)
 		else:
 			return Response({'success':False, 'message':'Unable to Retrieve object'}, status=HTTP_400_BAD_REQUEST)
 
