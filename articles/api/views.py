@@ -167,7 +167,7 @@ class ArticleDetailAPIView(APIView):
 			serializer = ArticleDetailSerializer(instance=article, context={'request':request})
 			serialized_data = serializer.data
 			response = {'success':True, 'message':'SuccessFully Retrieved Object'}
-			return Response(dict(response.items()+serialized_data.items()), status=HTTP_200_OK)
+			return Response(dict(response.items() | serialized_data.items()), status=HTTP_200_OK)
 		else:
 			return Response({'success':False, 'message':'Object Does Not Exists'})
 
