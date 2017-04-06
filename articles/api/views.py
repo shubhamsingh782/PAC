@@ -164,10 +164,13 @@ class ArticleDetailAPIView(APIView):
 	def get(self, request,pk, *args, **kwargs):
 		article = self.get_object(pk)
 		if article:
-			serializer = ArticleDetailSerializer(instance=article, context={'request':request})
-			serialized_data = serializer.data
-			response = {'success':True, 'message':'SuccessFully Retrieved Object'}
-			return Response(dict(response.items() | serialized_data.items()), status=HTTP_200_OK)
+			if request.user == article.user:
+				serializer = ArticleDetailSerializer(instance=article, context={'request':request})
+				serialized_data = serializer.data
+				response = {'success':True, 'message':'SuccessFully Retrieved Object'}
+				return Response(dict(response.items() | serialized_data.items()), status=HTTP_200_OK)
+			else:
+				return Response({'success':False, 'message':'You do not have permission to view this object'}, status=HTTP_400_BAD_REQUEST)
 		else:
 			return Response({'success':False, 'message':'Object Does Not Exists'})
 
