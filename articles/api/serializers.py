@@ -7,7 +7,7 @@ from articles.models import Article
 from rest_framework.validators import UniqueValidator
 #from django.contrib.auth import get_user_model
 
-DELETE_URL = serializers.HyperlinkedIdentityField(view_name='api_articles:detail')
+DELETE_URL = serializers.HyperlinkedIdentityField(view_name='api_articles:delete')
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
 	email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
@@ -51,6 +51,7 @@ class ArticleCreateSerializer(serializers.ModelSerializer):
 		fields = ('source',)
 
 class ArticleListSerializer(serializers.ModelSerializer):
+	url=serializers.HyperlinkedIdentityField(view_name='api_articles:detail')
 	class Meta:
 		model = Article
 		fields = ('id','url','title','image',)
@@ -60,4 +61,4 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
 	url = serializers.HyperlinkedIdentityField(view_name='api_articles:delete')
 	class Meta:
 		model = Article
-		fields = ('source','title','content','created','image',)
+		fields = ('source','title','content','created','url','image',)
