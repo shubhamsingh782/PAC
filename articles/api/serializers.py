@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
-from articles.models import Article
+from articles.models import Article, Profile
 from rest_framework.validators import UniqueValidator
 #from django.contrib.auth import get_user_model
 
@@ -15,9 +15,16 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 	last_name = serializers.CharField(required=True, max_length=100)
 	class Meta:
 		model = User
-		fields = ('username','first_name','last_name','email','password','photo')
+		fields = ('username','first_name','last_name','email','password')
 
 		extra_kwargs = {'password':{'write_only':True}}
+
+class ProfileSerializer(serializers.ModelSerializer):
+	photo = serializers.imageField(required=False)
+	class Meta:
+		model = Profile
+		fields = ('photo',)
+
 
 class UserLoginSerializer(serializers.ModelSerializer):
 	username = serializers.CharField(required=True)

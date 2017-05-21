@@ -4,6 +4,7 @@ from .serializers import(
 	ArticleCreateSerializer,
 	ArticleListSerializer,
 	ArticleDetailSerializer,
+	ProfileSerializer,
 	)
 from rest_framework.generics import(
 	CreateAPIView,
@@ -18,7 +19,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
-from articles.models import Article
+from articles.models import Article, Profile
 from django.contrib import auth
 from rest_framework.authtoken.models import Token
 from newspaper import Article as page
@@ -82,22 +83,26 @@ class UserRegistrationAPIView(APIView):
 	def post(self, request, *args, **kwargs):
 		data = request.data
 		serializer = UserRegistrationSerializer(data=data)
+		pro_serializer = ProfileSerializer(data = data)
 		if serializer.is_valid():
 			user = User.objects.create_user(
 								username=data['username'],
 								first_name=data['first_name'],
 								last_name=data['last_name'],
 								email=data['email'],
-								photo=data['photo']
 								)
 			user.set_password(data['password'])
 			user.save()
+
+			profile = Profile(user=user, photo=data['photo'])
+			profile.save()
 			return Response({
 							'success':True,
 							'message':'SuccessFully Registered',
 							'username':user.username,
 							'name':user.first_name+" "+user.last_name,
-							'email':user.email
+							'email':user.email,
+							'photo':profile.photo
 							},
 							status=HTTP_200_OK)
 		else:
@@ -121,6 +126,7 @@ class UserLoginAPIView(APIView):
 		user = serializer.validated_data['user']
 		token, created = Token.objects.get_or_create(user=user)
 		if user:
+			profile = Profile.Objects.filter(user=user)
 			return Response(
 						{'success':True,
 							 "message":"successfully logged in",
@@ -128,6 +134,7 @@ class UserLoginAPIView(APIView):
 							 'username':user.username,
 							 'name':user.first_name+" "+user.last_name,
 							 'email':user.email
+							 'photo':profile.photo
 							 },
 						 status=HTTP_200_OK)
 		return Response({'success':False,'message':"Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
