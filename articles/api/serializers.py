@@ -20,7 +20,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 		extra_kwargs = {'password':{'write_only':True}}
 
 class ProfileSerializer(serializers.ModelSerializer):
-	photo = serializers.imageField(required=False)
+	photo = serializers.ImageField(required=False)
 	class Meta:
 		model = Profile
 		fields = ('photo',)
