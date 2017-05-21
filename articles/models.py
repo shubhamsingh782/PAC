@@ -17,10 +17,17 @@ class Article(models.Model):
 	slug = models.SlugField(max_length=250, unique_for_date='created')
 	content = models.TextField()
 	created = models.DateTimeField(auto_now_add=True)
-	photo = models.ImageField(upload_to="photos/%Y/%m/%d",null=True, blank=True)
 
 	class Meta:
 		ordering = ('created',)
 
 	def __str__(self):
 		return self.title
+
+
+class Profile(models.Model):
+	user = models.OneToOneField(User, related_name='user_image', default=User.objects.get(username="shubham"))
+	photo = models.ImageField(upload_to="photos/%Y/%m/%d", blank=True)
+
+	def __str__(self):
+		return 'Profile For {}'.format(self.request.user)
