@@ -26,7 +26,7 @@ class Article(models.Model):
 
 
 class Profile(models.Model):
-	user = models.OneToOneField(User, related_name='user_image', default=User.objects.get(username="shubham"))
+	user = models.OneToOneField(User, related_name='user_image')
 	photo = models.ImageField(upload_to="photos/%Y/%m/%d", blank=True)
 
 	def __str__(self):
