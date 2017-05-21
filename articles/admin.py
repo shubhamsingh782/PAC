@@ -4,4 +4,7 @@ from . import models
 class ArticlesAdmin(admin.ModelAdmin):
 	list_display = ['id','user','source','image','title','created']
 
+class ProfileAdmin(admin.ModelAdmin):
+	list_display = ['id','user','photo']
+
 admin.site.register(models.Article, ArticlesAdmin)
