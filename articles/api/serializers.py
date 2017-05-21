@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
-from articles.models import Article, Profile
+from articles.models import Article
 from rest_framework.validators import UniqueValidator
 #from django.contrib.auth import get_user_model
 
@@ -19,11 +19,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 		extra_kwargs = {'password':{'write_only':True}}
 
-class ProfileSerializer(serializers.ModelSerializer):
-	photo = serializers.ImageField(required=False)
-	class Meta:
-		model = Profile
-		fields = ('photo',)
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
