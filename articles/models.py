@@ -17,7 +17,7 @@ class Article(models.Model):
 	slug = models.SlugField(max_length=250, unique_for_date='created')
 	content = models.TextField()
 	created = models.DateTimeField(auto_now_add=True)
-	photo = models.ImageField(upload_to="photos",null=True, blank=True)
+	photo = models.ImageField(upload_to="photos/%Y/%m/%d",null=True, blank=True)
 
 	class Meta:
 		ordering = ('created',)
