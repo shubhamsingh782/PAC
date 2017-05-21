@@ -15,7 +15,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 	last_name = serializers.CharField(required=True, max_length=100)
 	class Meta:
 		model = User
-		fields = ('username','first_name','last_name','email','password')
+		fields = ('username','first_name','last_name','email','password','photo')
 
 		extra_kwargs = {'password':{'write_only':True}}
 
@@ -59,6 +59,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
 	url = serializers.HyperlinkedIdentityField(view_name='api_articles:delete')
+	success = serializers.BooleanField
 	class Meta:
 		model = Article
 		fields = ('source','title','content','created','url','image',)
