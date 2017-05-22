@@ -4,6 +4,7 @@ from .serializers import(
 	ArticleCreateSerializer,
 	ArticleListSerializer,
 	ArticleDetailSerializer,
+	PasswordResetSerializer,
 	)
 from rest_framework.generics import(
 	CreateAPIView,
@@ -16,7 +17,7 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from rest_framework.views import APIView
 from articles.models import Article
 from django.contrib import auth
@@ -25,6 +26,22 @@ from newspaper import Article as page
 from bs4 import BeautifulSoup
 from urllib.request import FancyURLopener
 from random import choice
+
+#-------For Sending The Email---------------------------------------------------------------------------
+
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template import loader
+from django.core.validators import validate_email
+from django.core.mail import send_mail
+from django.views.generic import *
+from django.db.models.query_utils import Q
+
+#--------------------------------------------------------------------------------------------------------
+
+
+
 
 user_agents = [
     'Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11',
@@ -217,3 +234,70 @@ class APILogout(APIView):
 			request.user.auth_token.delete()
 			auth.logout(request)
 			return Response({'success':True,'message': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
+
+
+class ResetPasswordView(APIView):
+	@staticmethod
+	def validate_email_address(email):
+		try:
+			validate_email(email)
+			return True
+		except ValidationError:
+			return False
+
+	def post(self, request, *args, **kwargs):
+		serializer = PasswordResetSerializer(request.data)
+
+		if serializer.is_valid():
+			data = serializer.validated_data['email_or_username']
+
+		if self.validate_email_address(data):
+			user = User.objects.filter(Q(email=data)|Q(username=data))
+
+			if user:
+
+				c = {'email':user.email,
+					 'domain':request.META['HTTP_HOST'],
+					 'site_name':'PACK',
+					 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+					 'user':user,
+					 'token':default_token_generator.make_token(user),
+					 'protocol':'http',
+					 }
+
+				email_template = 'password_reset_email.html'
+				email = loader.render_to_string(email_template,c)
+				send_mail('Password Reset', email, 'Admin@pack.com',[user.email], fail_silently=False)
+				message = 'A link to reset your Password has been sent to your mail'
+
+				return Response({'success':True, 'message':message}, status=HTTP_200_OK)
+
+			message = 'No user is associated with this email address, check entered email.'
+			return Response({'success':False, 'message':message}, status=HTTP_400_BAD_REQUEST)
+
+		else:
+			user=User.objects.filter(username=data)
+			if user:
+
+				c = {'email':user.email,
+					 'domain':request.META['HTTP_HOST'],
+					 'site_name':'PACK',
+					 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+					 'user':user,
+					 'token':default_token_generator.make_token(user),
+					 'protocol':'http',
+					 }
+
+				email_template = 'password_reset_email.html'
+				email = loader.render_to_string(email_template,c)
+				send_mail('Password Reset', email, 'Admin@pack.com',[user.email], fail_silently=False)
+				message = 'A link to reset your Password has been sent to your mail'
+
+				return Response({'success':True, 'message':message}, status=HTTP_200_OK)
+
+			message = 'Username Not Found check again.'
+			return Response({'success':False, 'message':message}, status=HTTP_400_BAD_REQUEST)
+		
+
+
+

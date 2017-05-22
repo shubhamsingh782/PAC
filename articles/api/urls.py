@@ -7,6 +7,7 @@ from .views import(
 	 ArticleDetailAPIView,
 	 ArticleDeletAPIView,
 	 APILogout,
+	 ResetPasswordView
 	 )
 from rest_framework.authtoken import views
 urlpatterns = [
@@ -17,5 +18,8 @@ urlpatterns = [
 		url(r'^(?P<pk>\d+)/delete/$', ArticleDeletAPIView.as_view(), name='delete'),
 		url(r'^login/$', UserLoginAPIView.as_view(), name='login'),
 		url(r'^logout/$', APILogout.as_view(), name='logout'),
-		url(r'^auth/token/$', views.obtain_auth_token,name='auth_token'),
+		#url(r'^auth/token/$', views.obtain_auth_token,name='auth_token'),
+		
+		url(r'^reset_password/$',ResetPasswordView.as_view(), name='reset_password')
+
 		]
