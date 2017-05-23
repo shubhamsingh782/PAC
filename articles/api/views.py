@@ -249,9 +249,12 @@ class AvailableUsername(APIView):
 			data = serializer.validated_data['username']
 			try:
 				user = User.objects.filter(username=data)
-				return Response({'success':False, 'message':'Username Already Exists'}, status = HTTP_400_BAD_REQUEST)
 			except:
 				user = None
+
+			if user:
+				return Response({'success':False, 'message':'Username Already Exists'}, status = HTTP_400_BAD_REQUEST)
+			else:
 				return Response({'success':True, 'message':'You Can Use Username'}, status = HTTP_200_OK)
 			
 
