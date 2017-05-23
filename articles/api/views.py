@@ -243,7 +243,7 @@ class AvailableUsername(APIView):
 	queryset = User.objects.all()
 
 	def post(self, request, *args, **kwargs):
-		serializer = UsernameAvailability(request.data)
+		serializer = UsernameAvailability(data=request.data)
 
 		if serializer.is_valid():
 			data = serializer.validated_data['username']
@@ -269,7 +269,7 @@ class ResetPasswordView(APIView):
 			return False
 
 	def post(self, request, *args, **kwargs):
-		serializer = PasswordResetSerializer(request.data)
+		serializer = PasswordResetSerializer(data=request.data)
 
 		if serializer.is_valid():
 			data = serializer.validated_data['email_or_username']
@@ -325,7 +325,7 @@ class ResetPasswordView(APIView):
 class SetPasswordView(APIView):
 
 	def post(self, request, uidb64=None, token=None, *args, **kwargs):
-		serializer = SetPasswordSerializer(request.data)
+		serializer = SetPasswordSerializer(data=request.data)
 
 		assert uidb64 is not None and token is not None
 
