@@ -278,7 +278,7 @@ class ResetPasswordView(APIView):
 			data = serializer.validated_data['email_or_username']
 
 		if self.validate_email_address(data):
-			user = User.objects.filter(email=data)
+			user = User.objects.get(email=data)
 
 			if user:
 
