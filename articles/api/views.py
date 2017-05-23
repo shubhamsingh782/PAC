@@ -278,48 +278,50 @@ class ResetPasswordView(APIView):
 			data = serializer.validated_data['email_or_username']
 
 		if self.validate_email_address(data):
-			user = User.objects.get(email=data)
+			users = User.objects.filter(Q(email=data)|Q(username=data))
 
-			if user:
+			if users:
+				for user in users:
 
-				c = {'email':user.email,
-					 'domain':'pecker.surge.sh',
-					 'site_name':'PACK',
-					 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-					 'user':user,
-					 'token':default_token_generator.make_token(user),
-					 'protocol':'http',
+					c = {'email':user.email,
+					 	'domain':'pecker.surge.sh',
+					 	'site_name':'PACK',
+					 	'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+					 	'user':user,
+					 	'token':default_token_generator.make_token(user),
+					 	'protocol':'http',
 					 }
 
-				email_template = 'password_reset_email.html'
-				email = loader.render_to_string(email_template,c)
-				send_mail('Password Reset', email, 'Admin@pack.com',[user.email], fail_silently=False)
-				message = 'A link to reset your Password has been sent to your mail'
+					email_template = 'password_reset_email.html'
+					email = loader.render_to_string(email_template,c)
+					send_mail('Password Reset', email, 'Admin@pack.com',[user.email], fail_silently=False)
+					message = 'A link to reset your Password has been sent to your mail'
 
-				return Response({'success':True, 'message':message}, status=HTTP_200_OK)
+					return Response({'success':True, 'message':message}, status=HTTP_200_OK)
 
 			message = 'No user is associated with this email address, check entered email.'
 			return Response({'success':False, 'message':message}, status=HTTP_400_BAD_REQUEST)
 
 		else:
-			user=User.objects.filter(username=data)
-			if user:
+			users=User.objects.filter(username=data)
+			if users:
+				for user in users:
 
-				c = {'email':user.email,
-					 'domain':'pecker.surge.sh',
-					 'site_name':'PACK',
-					 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-					 'user':user,
-					 'token':default_token_generator.make_token(user),
-					 'protocol':'http',
+					c = {'email':user.email,
+					 	'domain':'pecker.surge.sh',
+					 	'site_name':'PACK',
+					 	'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+					 	'user':user,
+					 	'token':default_token_generator.make_token(user),
+					 	'protocol':'http',
 					 }
 
-				email_template = 'password_reset_email.html'
-				email = loader.render_to_string(email_template,c)
-				send_mail('Password Reset', email, 'Admin@pack.com',[user.email], fail_silently=False)
-				message = 'A link to reset your Password has been sent to your mail'
+					email_template = 'password_reset_email.html'
+					email = loader.render_to_string(email_template,c)
+					send_mail('Password Reset', email, 'Admin@pack.com',[user.email], fail_silently=False)
+					message = 'A link to reset your Password has been sent to your mail'
 
-				return Response({'success':True, 'message':message}, status=HTTP_200_OK)
+					return Response({'success':True, 'message':message}, status=HTTP_200_OK)
 
 			message = 'Username Not Found check again.'
 			return Response({'success':False, 'message':message}, status=HTTP_400_BAD_REQUEST)
