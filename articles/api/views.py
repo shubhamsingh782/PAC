@@ -5,6 +5,8 @@ from .serializers import(
 	ArticleListSerializer,
 	ArticleDetailSerializer,
 	PasswordResetSerializer,
+	UsernameAvailability,
+	SetPasswordSerializer,
 	)
 from rest_framework.generics import(
 	CreateAPIView,
@@ -236,6 +238,25 @@ class APILogout(APIView):
 			return Response({'success':True,'message': 'SuccessFully Logged Out'}, status=HTTP_200_OK)
 
 
+class AvailableUsername(APIView):
+
+	def post(self, request, *args, **kwargs):
+		serializer = UsernameAvailability(request.data)
+
+		if serializer.is_valid():
+			data = serializer.validated_data['username']
+			try:
+				user = User.objects.filter(username=data)
+				return Response({'success':False, 'message':'Username Already Exists'}, status = HTTP_400_BAD_REQUEST)
+			except:
+				user = None
+				return Response({'success':True, 'message':'You Can Use Username'}, status = HTTP_200_OK)
+			
+
+
+
+
+
 class ResetPasswordView(APIView):
 	@staticmethod
 	def validate_email_address(email):
@@ -257,7 +278,7 @@ class ResetPasswordView(APIView):
 			if user:
 
 				c = {'email':user.email,
-					 'domain':request.META['HTTP_HOST'],
+					 'domain':'pecker.surge.sh',
 					 'site_name':'PACK',
 					 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
 					 'user':user,
@@ -280,7 +301,7 @@ class ResetPasswordView(APIView):
 			if user:
 
 				c = {'email':user.email,
-					 'domain':request.META['HTTP_HOST'],
+					 'domain':'pecker.surge.sh',
 					 'site_name':'PACK',
 					 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
 					 'user':user,
@@ -297,7 +318,39 @@ class ResetPasswordView(APIView):
 
 			message = 'Username Not Found check again.'
 			return Response({'success':False, 'message':message}, status=HTTP_400_BAD_REQUEST)
-		
+
+
+class SetPasswordView(APIView):
+
+	def post(self, request, uidb64=None, token=None, *args, **kwargs):
+		serializer = SetPasswordSerializer(request.data)
+
+		assert uidb64 is not None and token is not None
+
+		try:
+			uid = urlsafe_base64_decode(uidb64)
+			user = User._default_manager.get(pk=uid)
+		except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+			user = None
+
+		if user is not None and default_token_generator.check_token(user, token):
+
+			if serializer.is_valid():
+				data = serializer.validated_data['password']
+				user.set_password(data)
+				user.save()
+
+				return Response({'success':True, 'message':'Password Reset Successfull'}, status=HTTP_200_OK)
+			else:
+				return Response({'success':False, 'message':'Unable to Reset Password'}, status=HTTP_400_BAD_REQUEST)
+		else:
+			return Response({'success':False,
+							 'message':'The Reset Password Link is No Longer Valid, Please try again'
+							 }, 
+							status=HTTP_400_BAD_REQUEST
+							)
+
+
 
 
 
