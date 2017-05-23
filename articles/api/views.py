@@ -239,6 +239,8 @@ class APILogout(APIView):
 
 
 class AvailableUsername(APIView):
+	serializer_class = UsernameAvailability
+	queryset = User.objects.all()
 
 	def post(self, request, *args, **kwargs):
 		serializer = UsernameAvailability(request.data)
