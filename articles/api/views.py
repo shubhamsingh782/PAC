@@ -8,6 +8,7 @@ from .serializers import(
 	UsernameAvailability,
 	EmailAvailability,
 	SetPasswordSerializer,
+	ChangePasswordSerializer,
 	)
 from rest_framework.generics import(
 	CreateAPIView,
@@ -184,7 +185,7 @@ class ArticleDetailAPIView(APIView):
 			article = None
 		return article
 
-	def get(self, request,pk, *args, **kwargs):
+	def get(self, request, pk, *args, **kwargs):
 		article = self.get_object(pk)
 		if article:
 			if request.user == article.user:
@@ -418,6 +419,25 @@ class SetPasswordView(APIView):
 							)
 
 
+class ChangePasswordView(APIView):
+	 serializer_class = ChangePasswordSerializer
+	 queryset = User.objects.all()
+	 permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		user = request.user
+		serializer = ChangePasswordSerializer(data = request.data)
+
+		if serializer.is_valid():
+			old_password = serializer.validated_data['old_password']
+			new_password = serializer.validated_data['new_password']
+
+		if old_password == user.password:
+			user.set_password(new_password)
+			user.save()
+			return Response({'success':True, 'message':'Password Changed Successfully'}, status=HTTP_200_OK)
+		else:
+			return Response({'success':False, 'message':'Check your previous password'}, status=HTTP_200_OK)
 
 
 

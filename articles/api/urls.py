@@ -11,6 +11,7 @@ from .views import(
 	 AvailableEmail,
 	 ResetPasswordView,
 	 SetPasswordView,
+	 ChangePasswordView,
 	 )
 from rest_framework.authtoken import views
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
 		#url(r'^auth/token/$', views.obtain_auth_token,name='auth_token'),
 
 		url(r'^check_availability/$', AvailableUsername.as_view(), name='availability'),
+		url(r'^change-password/$', ChangePasswordView.as_view(), name='change_password'),
 		url(r'^check-email-availability/$', AvailableEmail.as_view(), name='availability'),
 		url(r'^reset_password/$',ResetPasswordView.as_view(), name='reset_password'),
 		url(r'^setpassword/$', SetPasswordView.as_view(), name='set_password'),

@@ -8,6 +8,9 @@ from rest_framework.validators import UniqueValidator
 #from django.contrib.auth import get_user_model
 
 #DELETE_URL = serializers.HyperlinkedIdentityField(view_name='api_articles:delete')
+class ChangePasswordSerializer(serializers.Serializer):
+	old_password = serializers.CharField(required=True, max_length=32)
+	new_password = serializers.CharField(required=True, max_length=32)
 
 class PasswordResetSerializer(serializers.Serializer):
 	email_or_username = serializers.CharField(required=True, max_length=100)
