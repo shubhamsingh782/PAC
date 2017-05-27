@@ -254,7 +254,7 @@ class AvailableUsername(APIView):
 				user = None
 
 			if user:
-				return Response({'success':False, 'message':'Username Already Exists'}, status = HTTP_400_BAD_REQUEST)
+				return Response({'success':False, 'message':'Username Already Exists'}, status = HTTP_200_OK)
 			else:
 				return Response({'success':True, 'message':'You Can Use Username'}, status = HTTP_200_OK)
 			
