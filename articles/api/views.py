@@ -420,9 +420,9 @@ class SetPasswordView(APIView):
 
 
 class ChangePasswordView(APIView):
-	 serializer_class = ChangePasswordSerializer
-	 queryset = User.objects.all()
-	 permission_classes = [IsAuthenticated]
+	serializer_class = ChangePasswordSerializer
+	queryset = User.objects.all()
+	permission_classes = [IsAuthenticated]
 
 	def post(self, request, *args, **kwargs):
 		user = request.user
