@@ -28,6 +28,7 @@ from newspaper import Article as page
 from bs4 import BeautifulSoup
 from urllib.request import FancyURLopener
 from random import choice
+from django.conf import settings
 
 #-------For Sending The Email---------------------------------------------------------------------------
 
@@ -294,7 +295,7 @@ class ResetPasswordView(APIView):
 
 					email_template = 'password_reset_email.html'
 					email = loader.render_to_string(email_template,c)
-					send_mail('Password Reset','Reset Your Password', email, [user.email], fail_silently=False)
+					send_mail('Password Reset', email, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 					message = 'A link to reset your Password has been sent to your mail'
 
 					return Response({'success':True, 'message':message}, status=HTTP_200_OK)
@@ -318,7 +319,7 @@ class ResetPasswordView(APIView):
 
 					email_template = 'password_reset_email.html'
 					email = loader.render_to_string(email_template,c)
-					send_mail('Password Reset','Reset Your Password',email, [user.email], fail_silently=False)
+					send_mail('Password Reset', email, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 					message = 'A link to reset your Password has been sent to your mail'
 
 					return Response({'success':True, 'message':message}, status=HTTP_200_OK)
