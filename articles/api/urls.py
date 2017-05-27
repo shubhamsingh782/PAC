@@ -8,6 +8,7 @@ from .views import(
 	 ArticleDeletAPIView,
 	 APILogout,
 	 AvailableUsername,
+	 AvailableEmail,
 	 ResetPasswordView,
 	 SetPasswordView,
 	 )
@@ -23,6 +24,7 @@ urlpatterns = [
 		#url(r'^auth/token/$', views.obtain_auth_token,name='auth_token'),
 
 		url(r'^check_availability/$', AvailableUsername.as_view(), name='availability'),
+		url(r'^check-Email-availability/$', AvailableEmail.as_view(), name='availability'),
 		url(r'^reset_password/$',ResetPasswordView.as_view(), name='reset_password'),
 		url(r'^setpassword/$', SetPasswordView.as_view(), name='set_password'),
 		]
