@@ -6,6 +6,7 @@ from .serializers import(
 	ArticleDetailSerializer,
 	PasswordResetSerializer,
 	UsernameAvailability,
+	EmailAvailability,
 	SetPasswordSerializer,
 	)
 from rest_framework.generics import(
@@ -38,6 +39,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template import loader
 from django.core.validators import validate_email
 from django.core.mail import send_mail
+import sendgrid
 from django.views.generic import *
 from django.db.models.query_utils import Q
 
@@ -258,6 +260,42 @@ class AvailableUsername(APIView):
 			else:
 				return Response({'success':True, 'message':'You Can Use Username'}, status = HTTP_200_OK)
 			
+
+class AvailableEmail(APIView):
+	serializer_class = EmailAvailability
+	queryset = User.objects.all()
+
+	@staticmethod
+	def validate_email_address(email):
+		try:
+			validate_email(email)
+			return True
+		except ValidationError:
+			return False
+
+	def post(self, request, *args, **kwargs):
+		serializer = EmailAvailability(data = request.data)
+
+		if serializer.is_valid():
+			data = serializer.validated_data['email']
+
+			if validate_email_address(data):
+				try:
+					user = User.objects.filter(email=data)
+				except:
+					user = None
+
+				if user:
+					message = "Email Already in use"
+					return Response({'success':False, 'message':message}, status = HTTP_200_OK)
+
+				else:
+					message = "Email Available for Use"
+					return Response({'success':True, 'message':message}, status = HTTP_200_OK)
+
+			else:
+				message = 'please enter a valid email address'
+				return Response({'success':False, 'message':message}, status = HTTP_200_OK)
 
 
 
