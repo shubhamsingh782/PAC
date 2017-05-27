@@ -10,7 +10,7 @@ from rest_framework.validators import UniqueValidator
 #DELETE_URL = serializers.HyperlinkedIdentityField(view_name='api_articles:delete')
 
 class PasswordResetSerializer(serializers.Serializer):
-	email_or_username = serializers.CharField(required=True, max_length=250)
+	email_or_username = serializers.CharField(required=True, max_length=100)
 
 class UsernameAvailability(serializers.Serializer):
 	username = serializers.CharField(required=True, max_length=32)
