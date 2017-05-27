@@ -394,13 +394,15 @@ class ResetPasswordView(APIView):
 
 class SetPasswordView(APIView):
 
-	def post(self, request, uidb64=None, token=None, *args, **kwargs):
+	def post(self, request, *args, **kwargs):
 		serializer = SetPasswordSerializer(data=request.data)
 
-		assert uidb64 is not None and token is not None
+		if serializer.is_valid():
+			uid = serializer.validated_data['uid']
+			token = serializer.validated_data['token']
 
 		try:
-			uid = urlsafe_base64_decode(uidb64)
+			uid = urlsafe_base64_decode(uid)
 			user = User._default_manager.get(pk=uid)
 		except:
 			user = None

@@ -22,6 +22,8 @@ class EmailAvailability(serializers.Serializer):
 	email = serializers.CharField(required=True, max_length=100)
 
 class SetPasswordSerializer(serializers.Serializer):
+	uid = serializers.CharField(required=True, max_length=200)
+	token = serializers.CharField(required=True, max_length=200)
 	password = serializers.CharField(required=True, max_length=50)
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
