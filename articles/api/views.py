@@ -38,7 +38,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template import loader
 from django.core.validators import validate_email
-from django.core.mail import send_mail
+from sendgrid.helpers.mail import *
 import sendgrid
 from django.views.generic import *
 from django.db.models.query_utils import Q
@@ -320,6 +320,7 @@ class ResetPasswordView(APIView):
 			users = User.objects.filter(Q(email=data)|Q(username=data))
 
 			if users:
+				sg = sendgrid.SendGridAPIClient(apikey=settings.SENDGRID_API_KEY)
 				for user in users:
 
 					c = {'email':user.email,
