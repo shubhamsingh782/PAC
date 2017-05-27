@@ -326,7 +326,7 @@ class ResetPasswordView(APIView):
 				for user in users:
 
 					c = {'email':user.email,
-					 	'domain':'pecker.surge.sh',
+					 	'domain':'https://pecker.surge.sh',
 					 	'site_name':'PACK',
 					 	'uid':urlsafe_base64_encode(force_bytes(user.pk)),
 					 	'user':user,
@@ -362,7 +362,7 @@ class ResetPasswordView(APIView):
 				for user in users:
 
 					c = {'email':user.email,
-					 	 'domain':'pecker.surge.sh',
+					 	 'domain':'https://pecker.surge.sh',
 					 	 'site_name':'PACK',
 					 	 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
 					 	 'user':user,
@@ -379,7 +379,7 @@ class ResetPasswordView(APIView):
 					content = Content('text/plain', email)
 					mail = Mail(from_email, subject, to_email, content)
 					response = sg.client.mail.send.post(request_body=mail.get())
-					
+
 					message = 'A link to reset your Password has been sent to your mail'
 					return Response({'success':True, 'message':message}, status=HTTP_200_OK)
 
