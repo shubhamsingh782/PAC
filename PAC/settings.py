@@ -22,6 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '2b+zbk^(qt_@s!#)v!z1$x*_ti$#8+f*yt=u!8^o+gs5hlz)^a'
 
+SENDGRID_API_KEY = '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'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -140,5 +142,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'qq453911@gmail.com'
 EMAIL_HOST_PASSWORD = 'COMMONPASSWORD'
 EMAIL_PORT = 587
-SENDGRID_API_KEY = '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'
+
 

@@ -162,7 +162,11 @@ class ArticleCreateAPIView(CreateAPIView):
 
 	def perform_create(self,serializer):
 		url=self.request.POST.get('source')
+
 		title, content, image = scrape(url)
+
+		keywords = Keyword_Extractor(url)
+
 		serializer.save(user=self.request.user,title=title,content=content,image=image)
 
 class ArticleListAPIView(ListAPIView):
@@ -385,7 +389,7 @@ class ResetPasswordView(APIView):
 					return Response({'success':True, 'message':message}, status=HTTP_200_OK)
 
 			message = 'Username Not Found check again.'
-			return Response({'success':False, 'message':message}, status=HTTP_400_BAD_REQUEST)
+			return Response({'success':False, 'message':message}, status=HTTP_200_OK)
 
 
 class SetPasswordView(APIView):
@@ -410,12 +414,12 @@ class SetPasswordView(APIView):
 
 				return Response({'success':True, 'message':'Password Reset Successfull'}, status=HTTP_200_OK)
 			else:
-				return Response({'success':False, 'message':'Unable to Reset Password'}, status=HTTP_400_BAD_REQUEST)
+				return Response({'success':False, 'message':'Unable to Reset Password'}, status=HTTP_200_OK)
 		else:
 			return Response({'success':False,
 							 'message':'The Reset Password Link is No Longer Valid, Please try again'
 							 }, 
-							status=HTTP_400_BAD_REQUEST
+							status=HTTP_200_OK
 							)
 
 
