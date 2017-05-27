@@ -279,7 +279,7 @@ class AvailableEmail(APIView):
 		if serializer.is_valid():
 			data = serializer.validated_data['email']
 
-			if validate_email_address(data):
+			if self.validate_email_address(data):
 				try:
 					user = User.objects.filter(email=data)
 				except:
