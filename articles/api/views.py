@@ -355,6 +355,10 @@ class ResetPasswordView(APIView):
 		else:
 			users=User.objects.filter(username=data)
 			if users:
+
+				sg = sendgrid.SendGridAPIClient(apikey=settings.SENDGRID_API_KEY)
+				from_email = Email('qq453911@gmail.com')
+
 				for user in users:
 
 					c = {'email':user.email,
@@ -368,9 +372,15 @@ class ResetPasswordView(APIView):
 
 					email_template = 'password_reset_email.html'
 					email = loader.render_to_string(email_template,c)
-					send_mail('Password Reset', 'email', 'qq453911@gmail.com', ['tantric.singh73@gmail.com'], fail_silently=False)
-					message = 'A link to reset your Password has been sent to your mail'
 
+					#send_mail('Password Reset', 'email', 'qq453911@gmail.com', ['tantric.singh73@gmail.com'], fail_silently=False)
+					to_email = Email(user.email)
+					subject = 'Password Reset'
+					content = Content('text/plain', email)
+					mail = Mail(from_email, subject, to_email, content)
+					response = sg.client.mail.send.post(request_body=mail.get())
+					
+					message = 'A link to reset your Password has been sent to your mail'
 					return Response({'success':True, 'message':message}, status=HTTP_200_OK)
 
 			message = 'Username Not Found check again.'
