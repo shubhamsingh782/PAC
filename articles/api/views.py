@@ -127,7 +127,7 @@ class UserRegistrationAPIView(APIView):
 							'success':False,
 							'message':serializer.errors
 							},
-							status=HTTP_400_BAD_REQUEST)
+							status=HTTP_200_OK)
 
 
 class UserLoginAPIView(APIView):
