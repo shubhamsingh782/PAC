@@ -31,6 +31,7 @@ from bs4 import BeautifulSoup
 from urllib.request import FancyURLopener
 from random import choice
 from django.conf import settings
+from django.contrib.auth.hashers import check_password
 
 #-------For Sending The Email---------------------------------------------------------------------------
 
@@ -435,7 +436,7 @@ class ChangePasswordView(APIView):
 			old_password = serializer.validated_data['old_password']
 			new_password = serializer.validated_data['new_password']
 
-		if old_password == user.password:
+		if user.check_password(old_password):
 			user.set_password(new_password)
 			user.save()
 			return Response({'success':True, 'message':'Password Changed Successfully'}, status=HTTP_200_OK)
