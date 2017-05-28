@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,9 +21,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2b+zbk^(qt_@s!#)v!z1$x*_ti$#8+f*yt=u!8^o+gs5hlz)^a'
+SECRET_KEY = config.secret_key['key']
 
-SENDGRID_API_KEY = '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'
+SENDGRID_API_KEY = config.sendgrid_key['key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
