@@ -470,3 +470,17 @@ class ChangePasswordView(APIView):
 
 
 
+class ShowContentView(APIView):
+	serializer_class = ArticleCreateSerializer
+	queryset = Article.objects.all()
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		serializer = ArticleCreateSerializer(data=request.data)
+
+		if serializer.is_valid():
+			url = serializer.validated_data['source']
+			title,content,image = scrape(url)
+			return Response({'success':True, 'message':'Content Created','body':content}, status=HTTP_200_OK)
+		else:
+			return Response({'success':False,'message':'Unable to create content for this URL'},status=HTTP_200_OK)

@@ -3,6 +3,7 @@ from .views import(
 	 UserRegistrationAPIView,
 	 UserLoginAPIView,
 	 ArticleCreateAPIView,
+	 ShowContentView,
 	 ArticleListAPIView,
 	 ArticleDetailAPIView,
 	 ArticleDeletAPIView,
@@ -19,6 +20,7 @@ urlpatterns = [
 		url(r'^(?P<pk>\d+)/$', ArticleDetailAPIView.as_view(), name='detail'),
 		url(r'^create/$', ArticleCreateAPIView.as_view(), name='create'),
 		url(r'^register/$', UserRegistrationAPIView.as_view(), name='register'),
+		url(r'show-content/$', ShowContentView.as_view(), name='show_content')
 		url(r'^(?P<pk>\d+)/delete/$', ArticleDeletAPIView.as_view(), name='delete'),
 		url(r'^login/$', UserLoginAPIView.as_view(), name='login'),
 		url(r'^logout/$', APILogout.as_view(), name='logout'),
