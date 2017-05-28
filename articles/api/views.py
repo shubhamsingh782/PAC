@@ -164,9 +164,6 @@ class ArticleCreateAPIView(CreateAPIView):
 		url=self.request.POST.get('source')
 
 		title, content, image = scrape(url)
-
-		keywords = Keyword_Extractor(url)
-
 		serializer.save(user=self.request.user,title=title,content=content,image=image)
 
 class ArticleListAPIView(ListAPIView):
