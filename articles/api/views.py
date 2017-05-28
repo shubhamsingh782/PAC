@@ -156,16 +156,41 @@ class UserLoginAPIView(APIView):
 						 status=HTTP_200_OK)
 		return Response({'success':False,'message':"Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
 
-class ArticleCreateAPIView(CreateAPIView):
+class ArticleCreateAPIView(APIView):
 	serializer_class = ArticleCreateSerializer
 	queryset = Article.objects.all()
 	permission_classes = [IsAuthenticated,]
 
-	def perform_create(self,serializer):
-		url=self.request.POST.get('source')
+	def perform_create(self,url):
+		if url:
+			title, content, image = scrape(url)
+			article = Article(user=self.request.user,source=url,title=title,content=content, image=image,)
+			article.save()
+			return article
 
-		title, content, image = scrape(url)
-		serializer.save(user=self.request.user,title=title,content=content,image=image)
+	def post(self, request, *args, **kwargs):
+		data = request.data
+		serializer = ArticleCreateSerializer(data=data)
+
+		if serializer.is_valid():
+
+			url = serializer.validated_data['source']
+			article = self.perform_create(url)
+			return Response({'success':True,
+							 'message':'Article Created Successfully',
+							 'source':article.source, 
+							 'body':article.content
+							 },
+							  status=HTTP_200_OK)
+
+		else:
+			url = None
+			return Response({'success':False,'message':'Unable to collect data please try again'})
+
+
+
+
+
 
 class ArticleListAPIView(ListAPIView):
 	serializer_class = ArticleListSerializer
